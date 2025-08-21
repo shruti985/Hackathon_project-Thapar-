@@ -1,3 +1,32 @@
+// Home Button JavaScript
+document.getElementById("homeButton").addEventListener("click", function () {
+  // Option 1: Go to root of current domain
+  window.location.href = "/";
+
+  // Option 2: Go to specific home page (uncomment and modify as needed)
+  // window.location.href = '/index.html';
+
+  // Option 3: Go to specific URL (uncomment and modify as needed)
+  // window.location.href = 'https://yourdomain.com';
+});
+
+// Optional: Add smooth scroll to top functionality
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+}
+
+// Optional: Show/hide button based on scroll position
+window.addEventListener("scroll", function () {
+  const homeButton = document.getElementById("homeButton");
+  if (window.scrollY > 100) {
+    homeButton.style.opacity = "0.9";
+  } else {
+    homeButton.style.opacity = "1";
+  }
+});
 // Toggle guideline content
 function toggleGuideline(header) {
   const content = header.nextElementSibling;
