@@ -1,0 +1,117 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ask a Question - SheHealth</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+  body { background: #f3e9fb; display:flex; flex-direction:column; align-items:center; padding:20px; }
+  h2 { margin-bottom: 16px; color: #6d28d9; }
+  form { display:flex; flex-direction:column; width: 100%; max-width:500px; background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 8px rgba(0,0,0,0.1); }
+  input, textarea { margin-bottom:12px; padding:10px; border-radius:6px; border:1px solid #ccc; font-size:14px; }
+  button { padding:10px; border:none; border-radius:6px; background:#6d28d9; color:white; cursor:pointer; font-size:15px; }
+  button:hover { background:#7c3aed; }
+  .questions-container { margin-top:20px; width:100%; max-width:500px; }
+  .question-card { background:#fff0f5; padding:12px; border-radius:12px; border:1px solid #d0b3ff; margin-bottom:12px; }
+  .question-title { font-weight:600; margin-bottom:4px; }
+  .question-body { font-size:14px; margin-bottom:6px; }
+  .upvote-btn { background:#6d28d9; color:white; border:none; padding:4px 8px; border-radius:6px; cursor:pointer; margin-right:6px; }
+  .upvote-btn:hover { background:#7c3aed; }
+  .comment-input { width:100%; padding:6px; margin-top:4px; border-radius:6px; border:1px solid #ccc; }
+  .comment-btn { padding:4px 8px; margin-top:4px; background:#6d28d9; color:white; border:none; border-radius:6px; cursor:pointer; }
+  .comment-btn:hover { background:#7c3aed; }
+  .comments { margin-top:6px; font-size:13px; }
+</style>
+</head>
+<body>
+
+<h2>Ask a Question</h2>
+
+<form id="questionForm">
+  <input type="text" id="questionTitle" placeholder="Question Title" required>
+  <textarea id="questionBody" rows="4" placeholder="Question Details" required></textarea>
+  <button type="submit">Send Question</button>
+</form>
+
+<div class="questions-container" id="questionsContainer"></div>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+const socket = io("http://localhost:5000");
+
+let userId = localStorage.getItem("userId") || "User_" + Math.floor(Math.random()*10000);
+localStorage.setItem("userId", userId);
+
+const questionForm = document.getElementById("questionForm");
+const questionsContainer = document.getElementById("questionsContainer");
+let questions = [];
+
+// Submit question
+questionForm.addEventListener("submit", e=>{
+  e.preventDefault();
+  const title = document.getElementById("questionTitle").value.trim();
+  const body = document.getElementById("questionBody").value.trim();
+  if(!title || !body) return;
+  const q = { username:userId, title, body, upvotes:0, voters:[], comments:[] };
+  socket.emit("sendQuestion", q);
+  document.getElementById("questionTitle").value='';
+  document.getElementById("questionBody").value='';
+});
+
+// Listen for new question from server
+socket.on("newQuestion", q=>{
+  questions.push(q);
+  renderQuestions();
+});
+
+function renderQuestions(){
+  questionsContainer.innerHTML='';
+  questions.forEach((q,i)=>{
+    const div = document.createElement("div");
+    div.classList.add("question-card");
+    div.innerHTML = `
+      <div class="question-title">${q.title}</div>
+      <div class="question-body">${q.body}</div>
+      <button class="upvote-btn" onclick="upvote(${i})">Upvote (${q.upvotes})</button>
+      <input type="text" class="comment-input" placeholder="Add a comment" id="comment-${i}">
+      <button class="comment-btn" onclick="addComment(${i})">Comment</button>
+      <div class="comments" id="comments-${i}">
+        ${(q.comments || []).map(c=>`<div><b>${c.user}</b>: ${c.text}</div>`).join('')}
+      </div>
+    `;
+    questionsContainer.appendChild(div);
+  });
+}
+
+function upvote(index){
+  const q = questions[index];
+  if(!q.voters.includes(userId)){
+    q.upvotes++;
+    q.voters.push(userId);
+    socket.emit("upvoteQuestion", q._id || index); // if backend has _id, use it
+    renderQuestions();
+  }else{
+    alert("You can only upvote once");
+  }
+}
+
+function addComment(index){
+  const q = questions[index];
+  const input = document.getElementById(`comment-${index}`);
+  const text = input.value.trim();
+  if(!text) return;
+  if(!q.comments) q.comments=[];
+  q.comments.push({user:userId,text});
+  input.value='';
+  renderQuestions();
+}
+</script>
+
+</body>
+</html>
+
+
+

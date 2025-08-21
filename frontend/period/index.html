@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <title>Period Tracker</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* Home Button Styles */
+        .home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #5934b1, #64269e);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .home-button:hover {
+            background: linear-gradient(135deg, #7C3AED, #9333EA);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .home-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+        }
+
+        .home-button i {
+            font-size: 16px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .home-button {
+                top: 15px;
+                left: 15px;
+                padding: 10px 16px;
+                font-size: 13px;
+                min-width: 100px;
+            }
+            
+            .home-button i {
+                font-size: 14px;
+            }
+        }
+
+        /* Alternative compact version */
+        .home-button.compact {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            padding: 0;
+            min-width: auto;
+        }
+
+        .home-button.compact .button-text {
+            display: none;
+        }
+
+        .home-button.compact i {
+            font-size: 18px;
+        }
+    body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .header { text-align: center; color: white; margin-bottom: 30px; }
+    .header h1 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+    .header p { font-size: 1.1rem; opacity: 0.9; }
+    .card { background: white; border-radius: 20px; padding: 30px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); backdrop-filter: blur(10px); }
+    .form-group { margin-bottom: 25px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #5a4fcf; font-size: 1.1rem; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 15px; border: 2px solid #e1e8ed; border-radius: 12px; font-size: 1rem; transition: all 0.3s ease; }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+    .symptoms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 10px; }
+    .symptom-item { display: flex; align-items: center; padding: 12px; background: #f8f9ff; border-radius: 10px; border: 2px solid transparent; transition: all 0.3s ease; }
+    .symptom-item:hover { background: #ede7ff; border-color: #667eea; }
+    .symptom-item input[type="checkbox"] { margin-right: 10px; width: 18px; height: 18px; accent-color: #667eea; }
+    .symptom-item label { margin: 0; color: #333; font-weight: 500; cursor: pointer; }
+    .submit-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 15px; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102,126,234,0.3); }
+    .results { display: none; }
+    .result-item { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; text-align: center; }
+    .result-item h3 { font-size: 1.3rem; margin-bottom: 8px; }
+    .result-item p { font-size: 1.1rem; opacity: 0.9; }
+    .warning { background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important; color: #d63384; border: 2px solid #ffc0cb; }
+    .tips-section { display: none; margin-top: 20px; }
+    .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
+    .tip-card { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    .tip-card h4 { color: #5a4fcf; font-size: 1.2rem; margin-bottom: 15px; display: flex; align-items: center; }
+    .tip-card h4::before { content: "💜"; margin-right: 8px; }
+    .tip-card ul { list-style: none; padding-left: 0; }
+    .tip-card li { margin-bottom: 8px; padding-left: 20px; position: relative; color: #333; }
+    .tip-card li::before { content: "✨"; position: absolute; left: 0; }
+    .history-section { margin-top: 20px; }
+    .history-item { background: #f8f9ff; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid #667eea; }
+    .error-message { color: #d63384; text-align: center; margin-bottom: 20px; display: none; }
+    @media (max-width: 768px) { 
+      .header h1 { font-size: 2rem; } 
+      .card { padding: 20px; } 
+      .symptoms-grid { grid-template-columns: 1fr; } 
+      .tips-grid { grid-template-columns: 1fr; } 
+    }
+    .fade-in { animation: fadeIn 0.6s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🌸 PCOS & Period Tracker</h1>
+    <p>Track your cycle, monitor symptoms, and get personalized AI-based predictions</p>
+  </div>
+  <a href="../front/index2.html">
+  <button class="home-button" id="homeButton">
+        <i class="fas fa-home"></i>
+        <span class="button-text">Home</span>
+    </button>
+</a>
+  <div class="card">
+    <div class="error-message" id="errorMessage"></div>
+    <form id="periodForm">
+      <div class="form-group">
+        <label for="lastPeriodDate">Last Period Start Date</label>
+        <input type="date" id="lastPeriodDate" required aria-required="true">
+      </div>
+
+      <div class="form-group">
+        <label for="cycleLength">Average Cycle Length (days)</label>
+        <input type="number" id="cycleLength" value="28" min="20" max="45" required aria-required="true">
+      </div>
+
+      <div class="form-group">
+        <label for="symptoms">Current Symptoms</label>
+        <div class="symptoms-grid" id="symptoms">
+          <div class="symptom-item"><input type="checkbox" value="cramps" id="cramps" aria-label="Cramps"><label for="cramps">Cramps</label></div>
+          <div class="symptom-item"><input type="checkbox" value="acne" id="acne" aria-label="Acne"><label for="acne">Acne</label></div>
+          <div class="symptom-item"><input type="checkbox" value="mood swings" id="moodSwings" aria-label="Mood Swings"><label for="moodSwings">Mood Swings</label></div>
+          <div class="symptom-item"><input type="checkbox" value="bloating" id="bloating" aria-label="Bloating"><label for="bloating">Bloating</label></div>
+          <div class="symptom-item"><input type="checkbox" value="irregular bleeding" id="irregularBleeding" aria-label="Irregular Bleeding"><label for="irregularBleeding">Irregular Bleeding</label></div>
+          <div class="symptom-item"><input type="checkbox" value="fatigue" id="fatigue" aria-label="Fatigue"><label for="fatigue">Fatigue</label></div>
+          <div class="symptom-item"><input type="checkbox" value="weight gain" id="weightGain" aria-label="Weight Gain"><label for="weightGain">Weight Gain</label></div>
+          <div class="symptom-item"><input type="checkbox" value="hair loss" id="hairLoss" aria-label="Hair Loss"><label for="hairLoss">Hair Loss</label></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="mood">Current Mood</label>
+        <select id="mood" required aria-required="true">
+          <option value="normal">Normal</option>
+          <option value="happy">Happy</option>
+          <option value="sad">Sad</option>
+          <option value="stressed">Stressed</option>
+          <option value="angry">Angry</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="notes">Additional Notes</label>
+        <textarea id="notes" rows="3" placeholder="Write anything else you'd like to track..." aria-label="Additional Notes"></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">Track My Cycle</button>
+    </form>
+  </div>
+
+  <div class="results" id="results">
+    <div class="card fade-in">
+      <h2 style="color:#5a4fcf; margin-bottom:20px;">📊 Your Cycle Insights</h2>
+      <div id="resultsContent"></div>
+    </div>
+  </div>
+
+  <div class="tips-section" id="tipsSection">
+    <div class="card fade-in">
+      <h2 style="color:#5a4fcf; margin-bottom:20px;">💡 Health Tips & Care</h2>
+      <div class="tips-grid" id="tipsContent"></div>
+    </div>
+  </div>
+
+  <div class="history-section" id="historySection" style="display:none;">
+    <div class="card fade-in">
+      <h2 style="color:#5a4fcf; margin-bottom:20px;">📅 Cycle History</h2>
+      <div id="historyContent"></div>
+    </div>
+  </div>
+</ Филигрань
+div class="container">
+
+<script>
+  // Home Button JavaScript
+document.getElementById("homeButton").addEventListener("click", function () {
+  // Option 1: Go to root of current domain
+  window.location.href = "/";
+
+  // Option 2: Go to specific home page (uncomment and modify as needed)
+  // window.location.href = '/index.html';
+
+  // Option 3: Go to specific URL (uncomment and modify as needed)
+  // window.location.href = 'https://yourdomain.com';
+});
+
+// Optional: Add smooth scroll to top functionality
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+}
+
+// Optional: Show/hide button based on scroll position
+window.addEventListener("scroll", function () {
+  const homeButton = document.getElementById("homeButton");
+  if (window.scrollY > 100) {
+    homeButton.style.opacity = "0.9";
+  } else {
+    homeButton.style.opacity = "1";
+  }
+});
+class PeriodTracker {
+  constructor() {
+    this.logs = [];
+    this.bindEvents();
+    this.fetchLogs();
+  }
+
+  bindEvents() {
+    const form = document.getElementById('periodForm');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (this.validateForm()) {
+        this.handleSubmit();
+      }
+    });
+  }
+
+  validateForm() {
+    const lastPeriodDate = document.getElementById('lastPeriodDate').value;
+    const cycleLength = parseInt(document.getElementById('cycleLength').value);
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Validate last period date (not older than 1 year)
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+    if (new Date(lastPeriodDate) < oneYearAgo) {
+      errorMessage.textContent = 'Last period date cannot be older than one year.';
+      errorMessage.style.display = 'block';
+      return false;
+    }
+
+    // Validate cycle length
+    if (cycleLength < 20 || cycleLength > 45) {
+      errorMessage.textContent = 'Cycle length must be between 20 and 45 days.';
+      errorMessage.style.display = 'block';
+      return false;
+    }
+
+    errorMessage.style.display = 'none';
+    return true;
+  }
+
+  getFormData() {
+    const symptoms = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+    return {
+      lastPeriodDate: document.getElementById('lastPeriodDate').value,
+      cycleLength: parseInt(document.getElementById('cycleLength').value),
+      symptoms,
+      mood: document.getElementById('mood').value,
+      notes: document.getElementById('notes').value,
+      date: new Date().toISOString().split('T')[0]
+    };
+  }
+
+  async callPredictAPI(formData) {
+    try {
+      const resp = await fetch("http://localhost:5000/api/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: 1, // TODO: Replace with dynamic user ID from auth
+          lastPeriodDate: formData.lastPeriodDate,
+          cycleLength: formData.cycleLength,
+          symptoms: formData.symptoms,
+          mood: formData.mood,
+          notes: formData.notes
+        })
+      });
+      if (!resp.ok) throw new Error('Prediction API failed');
+      return await resp.json();
+    } catch (e) {
+      console.error('Prediction API error:', e);
+      throw e;
+    }
+  }
+
+  async handleSubmit() {
+    const formData = this.getFormData();
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Save log
+    try {
+      const logResponse = await fetch("http://localhost:5000/api/logs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: 1, ...formData })
+      });
+      if (!logResponse.ok) throw new Error('Failed to save log');
+    } catch (e) {
+      console.error('Log save error:', e);
+      errorMessage.textContent = 'Failed to save data. Please try again.';
+      errorMessage.style.display = 'block';
+      return;
+    }
+
+    // Predict from backend
+    let pred;
+    try {
+      pred = await this.callPredictAPI(formData);
+    } catch (e) {
+      errorMessage.textContent = 'Prediction failed. Showing local calculations.';
+      errorMessage.style.display = 'block';
+      this.displayResults(formData);
+      return;
+    }
+
+    // Render prediction and tips
+    this.displayServerPrediction(formData, pred);
+    this.displayTips(formData, pred);
+    this.fetchLogs();
+
+    // Show sections and scroll
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('tipsSection').style.display = 'block';
+    document.getElementById('historySection').style.display = 'block';
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+
+    // Reset form
+    document.getElementById('periodForm').reset();
+    document.getElementById('cycleLength').value = '28'; // Reset to default
+  }
+
+  displayServerPrediction(formData, pred) {
+    const resultsContent = `
+      <div class="result-item">
+        <h3>🗓 Next Expected Period</h3>
+        <p>${new Date(pred.next_expected_date).toDateString()}</p>
+      </div>
+      <div class="result-item">
+        <h3>🟣 Irregularity Score</h3>
+        <p>${pred.irregularity_score} (avg gap ${pred.average_gap}d, std ${pred.gap_stddev})</p>
+      </div>
+      <div class="result-item ${pred.pcos_risk.level === 'high' ? 'warning' : ''}">
+        <h3>🩺 PCOS Risk</h3>
+        <p>${pred.pcos_risk.level.toUpperCase()}${pred.pcos_risk.reasons?.length ? " – " + pred.pcos_risk.reasons.join("; ") : ""}</p>
+      </div>
+      <div class="result-item">
+        <h3>🌼 Fertile Window</h3>
+        <p>${new Date(pred.fertile_window.start).toDateString()} → ${new Date(pred.fertile_window.end).toDateString()}</p>
+      </div>
+      <div class="result-item">
+        <h3>📏 Current Cycle Length</h3>
+        <p>${formData.cycleLength} days</p>
+      </div>
+      ${formData.symptoms.length ? `
+      <div class="result-item">
+        <h3>🧾 Symptoms</h3>
+        <p>${formData.symptoms.join(", ")}</p>
+      </div>` : ""}
+      <div class="result-item">
+        <h3>📣 Status</h3>
+        <p>${pred.status}</p>
+      </div>
+      ${pred.trend ? `
+      <div class="result-item">
+        <h3>📈 Trend</h3>
+        <p>${pred.trend}</p>
+      </div>` : ""}
+      <div class="result-item">
+        <h3>💡 Suggestions</h3>
+        <p>${pred.suggestions.map(s => `• ${s}`).join("<br>")}</p>
+      </div>`;
+    document.getElementById('resultsContent').innerHTML = resultsContent;
+  }
+
+  displayTips(formData, pred) {
+    const tips = this.generateTips(formData, pred);
+    let tipsHtml = '';
+    tips.forEach(tip => {
+      tipsHtml += `
+        <div class="tip-card">
+          <h4>${tip.title}</h4>
+          <ul>
+            ${tip.items.map(item => `<li>${item}</li>`).join('')}
+          </ul>
+        </div>`;
+    });
+    document.getElementById('tipsContent').innerHTML = tipsHtml;
+  }
+
+  generateTips(formData, pred) {
+    const tips = [];
+    const pcosSymptoms = ['acne', 'weight gain', 'irregular bleeding', 'hair loss'];
+
+    // General health tips
+    tips.push({
+      title: 'General Wellness',
+      items: [
+        'Maintain a balanced diet rich in fruits, vegetables, and whole grains.',
+        'Stay hydrated by drinking at least 8 glasses of water daily.',
+        'Engage in regular physical activity (e.g., 30 minutes most days).'
+      ]
+    });
+
+    // PCOS-specific tips if high risk
+    if (pred.pcos_risk.level === 'high' || formData.symptoms.some(s => pcosSymptoms.includes(s))) {
+      tips.push({
+        title: 'PCOS Management',
+        items: [
+          'Consult a healthcare provider for PCOS evaluation.',
+          'Consider low-glycemic index foods to manage insulin levels.',
+          'Track symptoms regularly to identify patterns.'
+        ]
+      });
+    }
+
+    // Mood-based tips
+    if (formData.mood === 'stressed' || formData.mood === 'sad') {
+      tips.push({
+        title: 'Mood Support',
+        items: [
+          'Practice mindfulness or meditation for 10 minutes daily.',
+          'Connect with friends or a support group.',
+          'Consider journaling to express your emotions.'
+        ]
+      });
+    }
+
+    return tips;
+  }
+
+async fetchLogs() {
+  try {
+    const res = await fetch("http://localhost:5000/api/logs");
+    if (!res.ok) throw new Error('Failed to fetch logs');
+    const data = await res.json();
+
+    this.logs = data.map(log => ({
+      lastPeriodDate: log.last_period_date,
+      cycleLength: log.cycle_length,
+      symptoms: log.symptoms || [],  
+      mood: log.mood,
+      notes: log.notes || '',
+      date: log.createdAt              
+    }));
+
+    this.displayHistory();
+  } catch (err) {
+    console.error("Fetch error:", err);
+    document.getElementById('errorMessage').textContent = 'Failed to load history. Please try again.';
+    document.getElementById('errorMessage').style.display = 'block';
+  }
+}
+
+  displayResults(formData) {
+    const nextPeriod = this.calculateNextPeriod(formData.lastPeriodDate, formData.cycleLength);
+    const avgCycle = this.calculateAverageCycle();
+    const risk = this.assessPCOSRisk(formData, avgCycle);
+    const fertile = this.calculateFertileWindow(formData.lastPeriodDate, formData.cycleLength);
+
+    let html = `
+      <div class="result-item">
+        <h3>🗓 Next Expected Period</h3>
+        <p>${nextPeriod}</p>
+      </div>
+      <div class="result-item">
+        <h3>🌼 Fertile Window</h3>
+        <p>${fertile.start} → ${fertile.end}</p>
+      </div>
+      <div class="result-item">
+        <h3>📏 Current Cycle Length</h3>
+        <p>${formData.cycleLength} days</p>
+      </div>
+      ${formData.symptoms.length ? `
+      <div class="result-item">
+        <h3>🩺 Current Symptoms</h3>
+        <p>${formData.symptoms.join(', ')}</p>
+      </div>` : ''}
+      <div class="result-item">
+        <h3>😊 Mood Today</h3>
+        <p>${formData.mood.charAt(0).toUpperCase() + formData.mood.slice(1)}</p>
+      </div>
+      ${avgCycle ? `
+      <div class="result-item">
+        <h3>📊 Average Cycle Length</h3>
+        <p>${avgCycle} days</p>
+      </div>` : ''}
+      <div class="result-item ${risk.hasRisk ? 'warning' : ''}">
+        <h3>${risk.hasRisk ? '⚠ Health Notice' : '✅ Cycle Status'}</h3>
+        <p>${risk.hasRisk ? `Consult a doctor. Factors: ${risk.factors.join(', ')}` : 'Your cycle appears normal. Keep tracking!'}</p>
+      </div>`;
+    document.getElementById('resultsContent').innerHTML = html;
+  }
+  
+
+  displayHistory() {
+    if (this.logs.length === 0) {
+      document.getElementById('historySection').style.display = 'none';
+      return;
+    }
+
+    let html = '';
+    this.logs.forEach((log, i) => {
+      html += `
+        <div class="history-item">
+          <strong>Entry ${i + 1}</strong> - ${new Date(log.date).toLocaleDateString()}<br>
+          Last Period: ${new Date(log.lastPeriodDate).toLocaleDateString()}<br>
+          Cycle Length: ${log.cycleLength} days<br>
+          Symptoms: ${log.symptoms.join(', ') || 'None'}<br>
+          Mood: ${log.mood.charAt(0).toUpperCase() + log.mood.slice(1)}<br>
+          Notes: ${log.notes || 'None'}
+        </div>`;
+    });
+
+    document.getElementById('historyContent').innerHTML = html;
+    document.getElementById('historySection').style.display = 'block';
+  }
+
+  calculateNextPeriod(lastDate, cycleLength) {
+    const last = new Date(lastDate);
+    last.setDate(last.getDate() + cycleLength);
+    return last.toDateString();
+  }
+
+  calculateAverageCycle() {
+    if (this.logs.length < 2) return null;
+    const cycles = [];
+    for (let i = 0; i < this.logs.length - 1; i++) {
+      const diff = Math.abs(new Date(this.logs[i].lastPeriodDate) - new Date(this.logs[i + 1].lastPeriodDate)) / (1000 * 60 * 60 * 24);
+      if (diff > 0 && diff < 60) cycles.push(diff);
+    }
+    return cycles.length > 0 ? Math.round(cycles.reduce((a, b) => a + b, 0) / cycles.length) : null;
+  }
+
+  assessPCOSRisk(formData, avgCycle) {
+    const riskFactors = [];
+    if (formData.cycleLength < 21 || formData.cycleLength > 35) riskFactors.push('irregular cycle length');
+    if (avgCycle && Math.abs(avgCycle - formData.cycleLength) > 7) riskFactors.push('inconsistent cycle patterns');
+    const pcosSymptoms = ['acne', 'weight gain', 'irregular bleeding', 'hair loss'];
+    const present = formData.symptoms.filter(s => pcosSymptoms.includes(s));
+    if (present.length >= 2) riskFactors.push('multiple PCOS-related symptoms');
+    return { hasRisk: riskFactors.length > 0, factors: riskFactors };
+  }
+
+  calculateFertileWindow(lastDate, cycleLength) {
+    const last = new Date(lastDate);
+    const ovulationDay = cycleLength - 14;
+    const fertileStart = new Date(last); fertileStart.setDate(fertileStart.getDate() + ovulationDay - 4);
+    const fertileEnd = new Date(last); fertileEnd.setDate(fertileEnd.getDate() + ovulationDay + 1);
+    return { start: fertileStart.toDateString(), end: fertileEnd.toDateString() };
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  new PeriodTracker();
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('lastPeriodDate').setAttribute('max', today);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SheHealth - Breast & Cervical Health Awareness</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8B5CF6;
+            --secondary: #6366F1;
+            --accent: #A855F7;
+            --bg-light: #F8F7FF;
+            --text-dark: #333333;
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --purple-50: #faf5ff;
+            --purple-100: #f3e8ff;
+            --purple-200: #e9d5ff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .nav {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(139, 92, 246, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+
+        .nav-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .nav-subtitle {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 5rem 20px;
+            text-align: center;
+        }
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: bold;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .hero h2 {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.6s forwards;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--white);
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--gray-100);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-outline:hover {
+            background: var(--white);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Sections */
+        .section {
+            padding: 4rem 20px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--text-dark);
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .card-icon.primary {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--primary);
+        }
+
+        .card-icon.secondary {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--secondary);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+            color: var(--text-dark);
+        }
+
+        .card p {
+            color: var(--gray-600);
+            line-height: 1.5;
+        }
+
+        /* Self-Check Section */
+        .self-check {
+            background: var(--white);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .step-card {
+            background: var(--purple-50);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: var(--white);
+            font-weight: bold;
+            font-size: 1.125rem;
+        }
+
+        .cervical-info {
+            background: rgba(99, 102, 241, 0.05);
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-top: 2rem;
+        }
+
+        .cervical-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* AI Symptom Checker */
+        .symptom-checker {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
+        }
+
+        .symptom-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .analysis-result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: 0.5rem;
+            display: none;
+        }
+
+        .analysis-result.show {
+            display: block;
+        }
+
+        /* Screening Reminders */
+        .reminder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .reminder-card {
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border-left: 4px solid;
+        }
+
+        .reminder-card.primary {
+            background: rgba(139, 92, 246, 0.05);
+            border-left-color: var(--primary);
+        }
+
+        .reminder-card.secondary {
+            background: rgba(99, 102, 241, 0.05);
+            border-left-color: var(--secondary);
+        }
+
+        .reminder-link {
+            color: inherit;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .reminder-link:hover {
+            text-decoration: underline;
+        }
+
+        /* FAQ Section */
+        .faq {
+            background: var(--bg-light);
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--white);
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem;
+            background: none;
+            border: none;
+            text-align: left;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--gray-50);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--gray-600);
+            display: none;
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+
+        .faq-icon {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-icon.rotate {
+            transform: rotate(180deg);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            background: var(--white);
+        }
+
+        .carousel {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 1rem;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .testimonial-card {
+            min-width: 100%;
+            padding: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
+        }
+
+        .testimonial-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: var(--white);
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        .testimonial-avatar.primary {
+            background: var(--primary);
+        }
+
+        .testimonial-avatar.secondary {
+            background: var(--secondary);
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .carousel-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--primary);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-btn:hover {
+            background: rgba(139, 92, 246, 0.3);
+        }
+
+        /* Resources Section */
+        .resources {
+            background: var(--text-dark);
+            color: var(--white);
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .resource-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .resource-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .resource-icon.primary {
+            background: var(--primary);
+        }
+
+        .resource-icon.secondary {
+            background: var(--secondary);
+        }
+
+        .resource-number {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.125rem;
+        }
+
+        /* Video Section */
+        .video-section {
+            padding: 40px 20px;
+            background: #fff;
+            text-align: center;
+        }
+
+        .video-section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(139, 92, 246, 0.2);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 12px;
+        }
+
+        /* Quiz Container */
+        .quiz-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.15);
+            max-width: 450px;
+            margin: 20px auto;
+            border: 2px solid var(--primary);
+        }
+
+        .quiz-container h2 {
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .quiz-container label {
+            display: block;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .quiz-container select,
+        .quiz-container input {
+            width: 100%;
+            padding: 8px 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid var(--gray-300);
+        }
+
+        .quiz-container button {
+            width: 100%;
+            padding: 10px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .quiz-container button:hover {
+            background: var(--accent);
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--purple-50);
+            border-left: 5px solid var(--primary);
+            border-radius: 5px;
+            font-weight: 500;
+            color: var(--gray-700);
+            white-space: pre-line;
+        }
+
+        /* Calendar Modal */
+        .calendar-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .calendar-content {
+            background: #fff;
+            padding: 25px 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2);
+            text-align: center;
+            width: 320px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .calendar-header {
+            background-color: var(--primary);
+            padding: 12px;
+            border-radius: 12px 12px 0 0;
+            margin: -20px -20px 15px -20px;
+            color: white;
+        }
+
+        .calendar-content input[type="date"] {
+            padding: 10px;
+            margin: 15px 0;
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--gray-300);
+            font-size: 16px;
+        }
+
+        .calendar-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .btn-save {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .btn-cancel {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .btn-save:hover,
+        .btn-cancel:hover {
+            opacity: 0.9;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-1 { margin-bottom: 0.25rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+
+        .font-bold { font-weight: bold; }
+        .text-sm { font-size: 0.875rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+
+        .text-primary { color: var(--primary); }
+        .text-secondary { color: var(--secondary); }
+        .text-gray-600 { color: var(--gray-600); }
+        .text-gray-300 { color: var(--gray-300); }
+
+        .stars {
+            color: #fbbf24;
+            font-size: 1.125rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-container">
+            <div class="nav-brand">
+                <div class="nav-logo">S</div>
+                <span class="nav-title">SheHealth</span>
+                <span class="nav-subtitle">(Swasthya Sakhi)</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#self-check">Self-Check</a></li>
+                <li><a href="#resources">Resources</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-icon">
+                <svg viewBox="0 0 100 100" fill="none">
+                    <circle cx="50" cy="50" r="45" fill="rgba(255,255,255,0.2)"/>
+                    <path d="M35 40c0-8 6-15 15-15s15 7 15 15c0 8-15 25-15 25s-15-17-15-25z" fill="white"/>
+                    <circle cx="50" cy="40" r="3" fill="#8B5CF6"/>
+                </svg>
+            </div>
+            <h1>Breast & Cervical Health</h1>
+            <h2>Detect Early, Act Fast</h2>
+            <p>Self-exam guides, early detection tools, and awareness to save lives.</p>
+            <div class="hero-buttons">
+                <a href="#self-check" class="btn btn-primary">Start Self-Check</a>
+                <a href="#why-matters" class="btn btn-outline">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why It Matters Section -->
+    <section id="why-matters" class="section">
+        <div class="container">
+            <h2 class="section-title">Why Early Detection Matters</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon primary">
+                        <svg width="32" height="32" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3>95% Survival Rate</h3>
+                    <p>When detected early, breast cancer has a 95% five-year survival rate. Early detection saves lives.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon secondary">
+                        <svg width="32" height="32" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                        </svg>
+                    </div>
+                    <h3>Know the Signs</h3>
+                    <p>Unusual lumps, changes in breast shape, or abnormal discharge are key warning signs to watch for.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon primary">
+                        <svg width="32" height="32" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                        </svg>
+                    </div>
+                    <h3>Risk Factors</h3>
+                    <p>Age, family history, and lifestyle factors can increase risk. Regular screening is essential for everyone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Self-Examination Guides -->
+    <section id="self-check" class="section self-check">
+        <div class="container">
+            <h2 class="section-title">Self-Examination Guide</h2>
+            
+            <!-- Breast Self-Exam -->
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-4 text-center text-primary">Breast Self-Examination</h3>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h4 class="font-bold mb-2">Look in Mirror</h4>
+                        <p class="text-sm text-gray-600">Check for changes in size, shape, or skin texture</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h4 class="font-bold mb-2">Arms Raised</h4>
+                        <p class="text-sm text-gray-600">Lift arms overhead and look for dimpling or changes</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h4 class="font-bold mb-2">Lying Down</h4>
+                        <p class="text-sm text-gray-600">Use flat fingers to feel for lumps in circular motions</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h4 class="font-bold mb-2">In Shower</h4>
+                        <p class="text-sm text-gray-600">Check with soapy hands for easier movement</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cervical Health Info -->
+            <div class="cervical-info">
+                <h3 class="text-xl font-bold mb-4 text-center text-secondary">Cervical Health Awareness</h3>
+                <div class="cervical-grid">
+                    <div class="text-center">
+                        <div class="card-icon secondary">
+                            <svg width="32" height="32" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 102 0V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm0 2a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-bold mb-2">Pap Smear Test</h4>
+                        <p class="text-gray-600">Regular Pap smears detect abnormal cervical cells early. Recommended every 3 years for women 21-65.</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="card-icon secondary">
+                            <svg width="32" height="32" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 2L3 7v11a1 1 0 001 1h3v-8h6v8h3a1 1 0 001-1V7l-7-5z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-bold mb-2">HPV Vaccine</h4>
+                        <p class="text-gray-600">HPV vaccination prevents most cervical cancers. Best when given before first sexual activity.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Symptom Checker -->
+    <div class="quiz-container">
+        <h2>AI Symptom Checker</h2>
+        <p>Answer the following questions to get a suggestion:</p>
+
+        <label for="location">Where is the pain/issue?</label>
+        <select id="location">
+            <option value="">Select location</option>
+            <option value="left">Left breast</option>
+            <option value="right">Right breast</option>
+            <option value="both">Both breasts</option>
+        </select>
+
+        <label for="severity">Severity of pain:</label>
+        <select id="severity">
+            <option value="">Select severity</option>
+            <option value="mild">Mild</option>
+            <option value="moderate">Moderate</option>
+            <option value="severe">Severe</option>
+        </select>
+
+        <label for="duration">Duration:</label>
+        <select id="duration">
+            <option value="">Select duration</option>
+            <option value="1-3 days">1-3 days</option>
+            <option value="1 week">1 week</option>
+            <option value="more than a week">More than a week</option>
+        </select>
+
+        <label for="otherSymptoms">Other symptoms (lump, redness, discharge, itching):</label>
+        <input type="text" id="otherSymptoms" placeholder="e.g., lump, redness">
+
+        <button id="checkBtn">Get Suggestion</button>
+
+        <div id="result"></div>
+    </div>
+
+    <!-- Screening Reminders -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Screening Reminders</h2>
+            <div class="reminder-grid">
+                <div class="reminder-card primary">
+                    <h3 class="text-lg font-bold mb-2 text-primary">Monthly Self-Exam</h3>
+                    <p class="text-gray-600 mb-4">Perform breast self-examination every month after your period.</p>
+                    <button class="reminder-link text-primary" onclick="openCalendar('Self-Exam')">Set Reminder</button>
+                </div>
+                
+                <div class="reminder-card secondary">
+                    <h3 class="text-lg font-bold mb-2 text-secondary">Annual Mammogram</h3>
+                    <p class="text-gray-600 mb-4">Schedule yearly mammograms if you're 40+ or have family history.</p>
+                    <button class="reminder-link text-secondary" onclick="openCalendar('Mammogram')">Find Centers</button>
+                </div>
+                
+                <div class="reminder-card primary">
+                    <h3 class="text-lg font-bold mb-2 text-primary">Pap Smear</h3>
+                    <p class="text-gray-600 mb-4">Get a Pap smear every 3 years (ages 21-65) to screen for cervical cancer.</p>
+                    <button class="reminder-link text-primary" onclick="openCalendar('Pap Smear')">Schedule Now</button>
+                </div>
+            </div>
+
+            <!-- Calendar Modal -->
+            <div id="calendarModal" class="calendar-modal" style="display:none;">
+                <div class="calendar-content">
+                    <div class="calendar-header">
+                        <h3 id="reminderTitle">Set Reminder</h3>
+                    </div>
+                    <input type="date" id="reminderDate">
+                    <div class="calendar-buttons">
+                        <button class="btn-save" onclick="saveReminder()">Save</button>
+                        <button class="btn-cancel" onclick="closeCalendar()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Myths & FAQ -->
+    <section class="section faq">
+        <div class="container">
+            <h2 class="section-title">Busting Myths & Common Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(0)">
+                        <span>Myth: Only women with family history get breast cancer</span>
+                        <svg class="faq-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Fact:</strong> 80% of women diagnosed with breast cancer have no family history. While family history increases risk, anyone can develop breast cancer.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(1)">
+                        <span>Myth: Cervical cancer only affects older women</span>
+                        <svg class="faq-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Fact:</strong> Cervical cancer can occur at any age after puberty. Regular screening from age 21 is crucial for early detection.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(2)">
+                        <span>Myth: Small breasts have lower cancer risk</span>
+                        <svg class="faq-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Fact:</strong> Breast size has no correlation with cancer risk. All women, regardless of breast size, should perform regular self-exams.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(3)">
+                        <span>Myth: Birth control pills cause cervical cancer</span>
+                        <svg class="faq-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Fact:</strong> There's a slight increase in cervical cancer risk with long-term oral contraceptive use, but the benefits usually outweigh the risks. Regular screening is key.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Helpful Videos Section -->
+    <section class="video-section">
+        <h2>Helpful Videos</h2>
+        <div class="video-grid">
+            <!-- English Videos -->
+            <div class="video-container">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/nkPR4ar1EQ4?si=w2cgFcGFbFKGuCO8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <div class="video-container">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/MgkpdpKR7XM?si=lG_HTujI_yynD7_S" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <!-- Hindi/Indian Videos -->
+            <div class="video-container">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/HQzby47EaIU?si=Vly9PI8R6zsZXjjH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <div class="video-container">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/XKtTymNkcj0?si=xcPYiARnCTn1BSWo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stories & Motivation -->
+    <section class="section testimonials">
+        <div class="container">
+            <h2 class="section-title">Stories of Hope & Healing</h2>
+            <div class="carousel">
+                <div class="carousel-track" id="carousel-track">
+                    <div class="testimonial-card">
+                        <div class="testimonial-avatar primary">P</div>
+                        <h3 class="text-xl font-bold mb-2">Priya's Journey</h3>
+                        <p class="text-gray-600 mb-4 font-italic">"Early detection through self-examination saved my life. I found a small lump and immediately consulted my doctor. Today, I'm cancer-free and advocating for awareness."</p>
+                        <div class="stars">★★★★★</div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-avatar secondary">S</div>
+                        <h3 class="text-xl font-bold mb-2">Sunita's Story</h3>
+                        <p class="text-gray-600 mb-4 font-italic">"Regular Pap smears helped detect abnormal cells early. The treatment was simple because we caught it in time. Don't skip your screenings!"</p>
+                        <div class="stars">★★★★★</div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="testimonial-avatar primary">A</div>
+                        <h3 class="text-xl font-bold mb-2">Anita's Strength</h3>
+                        <p class="text-gray-600 mb-4 font-italic">"Knowledge is power. Understanding my risk factors and staying vigilant with check-ups gave me confidence. Today I help other women do the same."</p>
+                        <div class="stars">★★★★★</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="carousel-controls">
+                <button class="carousel-btn" onclick="moveCarousel(-1)">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"/>
+                    </svg>
+                </button>
+                <button class="carousel-btn" onclick="moveCarousel(1)">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Resources -->
+    <section id="resources" class="section resources">
+        <div class="container">
+            <h2 class="section-title">Emergency Resources & Support</h2>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon primary">
+                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">24/7 Helpline</h3>
+                    <p class="text-sm text-gray-300 mb-3">Cancer support and guidance</p>
+                    <p class="resource-number">1800-11-1800</p>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon secondary">
+                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Find Hospitals</h3>
+                    <p class="text-sm text-gray-300 mb-3">Locate nearby cancer centers</p>
+                    <a href="#" class="resource-number" style="text-decoration: none;">Hospital Locator</a>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon primary">
+                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Support Groups</h3>
+                    <p class="text-sm text-gray-300 mb-3">Connect with survivors</p>
+                    <a href="#" class="resource-number" style="text-decoration: none;">Join Community</a>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon secondary">
+                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">NGO Partners</h3>
+                    <p class="text-sm text-gray-300 mb-3">Free screening programs</p>
+                    <a href="#" class="resource-number" style="text-decoration: none;">Find NGOs</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="section" style="background: var(--white); padding: 2rem 20px; border-top: 1px solid var(--gray-100);">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                <div>
+                    <div class="nav-brand" style="margin-bottom: 1rem;">
+                        <div class="nav-logo">S</div>
+                        <span class="nav-title">SheHealth</span>
+                    </div>
+                    <p class="text-gray-600">Empowering women with health awareness and early detection tools for a healthier tomorrow.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-3">Quick Links</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem;"><a href="#self-check" style="color: var(--gray-600); text-decoration: none;">Self-Check Guide</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="#resources" style="color: var(--gray-600); text-decoration: none;">Resources</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: var(--gray-600); text-decoration: none;">Book Appointment</a></li>
+                        <li><a href="#" style="color: var(--gray-600); text-decoration: none;">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-3">Emergency</h4>
+                    <p class="text-gray-600">24/7 Cancer Helpline:</p>
+                    <p class="text-primary font-bold text-lg">1800-11-1800</p>
+                    <p class="text-sm text-gray-600 mt-2">Free and confidential support</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--gray-100);">
+                <p class="text-gray-600">&copy; 2024 SheHealth (Swasthya Sakhi). All rights reserved. | Made with love for women's health awareness</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const locationInput = document.getElementById("location");
+        const severityInput = document.getElementById("severity");
+        const durationInput = document.getElementById("duration");
+        const otherInput = document.getElementById("otherSymptoms");
+        const checkBtn = document.getElementById("checkBtn");
+        const resultDiv = document.getElementById("result");
+
+        checkBtn.addEventListener("click", () => {
+            const location = locationInput.value;
+            const severity = severityInput.value;
+            const duration = durationInput.value;
+            const other = otherInput.value.toLowerCase();
+
+            if (!location || !severity || !duration) {
+                resultDiv.textContent = "Please fill all required fields.";
+                return;
+            }
+
+            let suggestion = "Based on your inputs:\n";
+
+            if (other.includes("lump")) suggestion += "- Presence of lump: consult a doctor immediately.\n";
+            if (other.includes("discharge")) suggestion += "- Nipple discharge: consult a doctor immediately.\n";
+            if (other.includes("redness") || other.includes("swelling")) suggestion += "- Redness or swelling: monitor and consult a doctor if persists.\n";
+            if (other.includes("itching") || severity === "mild") suggestion += "- Mild symptoms: observe, but consult a doctor if ongoing.\n";
+            if (severity === "severe" || duration === "more than a week") suggestion += "- Severe or long-lasting symptoms: seek medical advice urgently.\n";
+
+            suggestion += "\n⚠ Always consult a healthcare professional for accurate diagnosis.";
+
+            resultDiv.textContent = suggestion;
+        });
+
+        let currentReminder = '';
+
+        function openCalendar(reminderType) {
+            currentReminder = reminderType;
+            document.getElementById('reminderTitle').innerText = `Set Reminder: ${reminderType}`;
+            document.getElementById('calendarModal').style.display = 'flex';
+        }
+
+        function closeCalendar() {
+            document.getElementById('calendarModal').style.display = 'none';
+        }
+
+        function saveReminder() {
+            const date = document.getElementById('reminderDate').value;
+            if (!date) {
+                alert('Please select a date.');
+                return;
+            }
+            
+            alert(`Reminder for ${currentReminder} set on ${date}`);
+            closeCalendar();
+        }
+
+        // FAQ Toggle
+        function toggleFAQ(index) {
+            const questions = document.querySelectorAll('.faq-question');
+            const answers = document.querySelectorAll('.faq-answer');
+            const icons = document.querySelectorAll('.faq-icon');
+            
+            // Close all other FAQs
+            answers.forEach((answer, i) => {
+                if (i !== index) {
+                    answer.classList.remove('show');
+                    icons[i].classList.remove('rotate');
+                }
+            });
+            
+            // Toggle current FAQ
+            answers[index].classList.toggle('show');
+            icons[index].classList.toggle('rotate');
+        }
+
+        // Carousel
+        let currentSlide = 0;
+        const totalSlides = 3;
+        
+        function moveCarousel(direction) {
+            currentSlide += direction;
+            
+            if (currentSlide >= totalSlides) {
+                currentSlide = 0;
+            } else if (currentSlide < 0) {
+                currentSlide = totalSlides - 1;
+            }
+            
+            const track = document.getElementById('carousel-track');
+            track.style.transform = translateX(`-${currentSlide * 100}%`);
+        }
+        
+        // Auto-play carousel
+        setInterval(() => {
+            moveCarousel(1);
+        }, 5000);
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and sections for animation
+        document.querySelectorAll('.card, .step-card, .testimonial-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
