@@ -358,6 +358,17 @@ body {
   position: relative;
   z-index: 1;
 }
+.feature-carousel {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
+}
+
+.feature-slide {
+  min-width: 100%; /* each slide takes full width */
+  box-sizing: border-box;
+}
+
 
 .highlight { 
   color: #6A0DAD;
@@ -1046,7 +1057,7 @@ body {
               <h4>PCOD & PCOS</h4>
               <p>Smart PCOS detection and management tool</p>
             </a>
-            </a>
+            
             <a href="../breast/index.html" class="feature-card" onclick="handleFeatureClick('safety-utility')">
               <div class="icon bg-purple-dark"><i data-lucide="shield"></i></div>
               <h4>Breast Cancer</h4>
@@ -1061,14 +1072,14 @@ body {
         </div>
       </div>
       
-      <!-- <div class="carousel-nav">
-        <button class="carousel-btn" id="prevBtn" onclick="changeSlide(-1)">
+      <div class="carousel-nav">
+        <button class="carousel-btn" id="prevBtn" ">
           <i data-lucide="chevron-left"></i> Previous
         </button>
-        <button class="carousel-btn" id="nextBtn" onclick="changeSlide(1)">
+        <button class="carousel-btn" id="nextBtn" ">
           Next <i data-lucide="chevron-right"></i>
         </button>
-      </div> -->
+      </div>
       
       <div class="carousel-indicators">
         <div class="indicator active" onclick="goToSlide(0)"></div>
@@ -1149,6 +1160,9 @@ body {
   </button>
 
   <script>
+    
+(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="bccubzB_Msdqw-vpkWhVI";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+
     // Error Handling System
     class ErrorHandler {
       static instance = null;
@@ -1283,72 +1297,80 @@ body {
     let currentSlide = 0;
     const totalSlides = 3;
     
-    function changeSlide(direction) {
-      try {
-        const carousel = document.getElementById('featureCarousel');
-        const indicators = document.querySelectorAll('.indicator');
-        
-        if (!carousel || !indicators.length) {
-          throw new Error('Carousel elements not found');
-        }
-        
-        currentSlide += direction;
-        
-        if (currentSlide >= totalSlides) {
-          currentSlide = 0;
-        } else if (currentSlide < 0) {
-          currentSlide = totalSlides - 1;
-        }
-        
-        carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
-        
-        // Update indicators
-        indicators.forEach((indicator, index) => {
-          indicator.classList.toggle('active', index === currentSlide);
-        });
-        
-        // Update button states
-        updateCarouselButtons();
-        
-      } catch (error) {
-        errorHandler.logError('Carousel Error', error);
-        errorHandler.showToast('Carousel navigation failed', 'error');
-      }
+// let currentSlide = 0;
+// const totalSlides = document.querySelectorAll('.feature-slide').length;
+const prevBtn=document.getElementById("prevBtn");
+const nextBtn=document.getElementById("nextBtn");
+prevBtn.addEventListener("click",()=>{
+  changeSlide(-1);
+})
+nextBtn.addEventListener("click",()=>{
+  changeSlide(1);
+})
+function changeSlide(direction) {
+  try {
+    const carousel = document.getElementById('featureCarousel');
+    const indicators = document.querySelectorAll('.indicator');
+
+    if (!carousel || !indicators.length) {
+      throw new Error('Carousel elements not found');
     }
-    
-    // function goToSlide(slideIndex) {
-    //   try {
-    //     if (slideIndex < 0 || slideIndex >= totalSlides) {
-    //       throw new Error('Invalid slide index');
-    //     }
-        
-    //     const carousel = document.getElementById('featureCarousel');
-    //     const indicators = document.querySelectorAll('.indicator');
-        
-    //     currentSlide = slideIndex;
-    //     carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
-        
-    //     indicators.forEach((indicator, index) => {
-    //       indicator.classList.toggle('active', index === currentSlide);
-    //     });
-        
-    //     updateCarouselButtons();
-        
-    //   } catch (error) {
-    //     errorHandler.logError('Slide Navigation Error', error);
-    //     errorHandler.showToast('Failed to navigate to slide', 'error');
-    //   }
-    // }
-    
-    function updateCarouselButtons() {
-      const prevBtn = document.getElementById('prevBtn');
-      const nextBtn = document.getElementById('nextBtn');
-      
-      if (prevBtn && nextBtn) {
-        prevBtn.disabled = false;
-        nextBtn.disabled = false;
-      }
+
+    currentSlide += direction;
+
+    if (currentSlide >= totalSlides) {
+      currentSlide = 0;
+    } else if (currentSlide < 0) {
+      currentSlide = totalSlides - 1;
     }
+
+    carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+    // Update indicators
+    indicators.forEach((indicator, index) => {
+      indicator.classList.toggle('active', index === currentSlide);
+    });
+
+    updateCarouselButtons();
+
+  } catch (error) {
+    console.error('Carousel Error:', error);
+  }
+}
+
+function goToSlide(slideIndex) {
+  try {
+    if (slideIndex < 0 || slideIndex >= totalSlides) {
+      throw new Error('Invalid slide index');
+    }
+
+    const carousel = document.getElementById('featureCarousel');
+    const indicators = document.querySelectorAll('.indicator');
+
+    currentSlide = slideIndex;
+    carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+    indicators.forEach((indicator, index) => {
+      indicator.classList.toggle('active', index === currentSlide);
+    });
+
+    updateCarouselButtons();
+
+  } catch (error) {
+    console.error('Slide Navigation Error:', error);
+  }
+}
+
+function updateCarouselButtons() {
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  if (prevBtn && nextBtn) {
+    prevBtn.disabled = false;
+    nextBtn.disabled = false;
+  }
+}
+
     
     // Auto-play carousel
     function startAutoPlay() {
